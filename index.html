@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Md. Yaleed Haque — Phones into Controllers, PCs into Agents</title>
 <meta name="description" content="A four-chapter night walk through a live local network — gamepads into controllers, PCs into agents, nine edge projects running without a single cloud server. Rendered live in WebGL.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305070a'/%3E%3Ccircle cx='16' cy='17' r='8' fill='%23c9a24a'/%3E%3Crect x='4' y='8' width='24' height='2.6' fill='%23dfe7e0'/%3E%3Crect x='7' y='13' width='18' height='2' fill='%23dfe7e0'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2304070c'/%3E%3Ccircle cx='16' cy='17' r='8' fill='%2319c8ff'/%3E%3Crect x='4' y='8' width='24' height='2.6' fill='%23dfe7e0'/%3E%3Crect x='7' y='13' width='18' height='2' fill='%23dfe7e0'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="secret-pathways-assets/fonts.css">
 <style>
 /* ============================================================= tokens */
 :root{
-  --ink:#05070a;          /* page black */
-  --ink-2:#0a0e12;        /* raised black */
+  --ink:#04070c;          /* page black — hologram night */
+  --ink-2:#080d14;        /* raised black */
   --bone:#dfe7e0;         /* the pale sage white of the wordmark */
   --bone-dim:#aab4ad;
   --muted:#78837c;
   --line:rgba(223,231,224,.13);
   --line-soft:rgba(223,231,224,.07);
-  --vermilion:#c9a24a;        /* amber accent — the network's warm note */
-  --ember:#ff8a3c;            /* warm ember glow */
+  --vermilion:#19c8ff;        /* hologram cyan — the network's primary note */
+  --ember:#ff2bd6;            /* hologram magenta — the network's secondary note */
   --gold:#c9a24a;
-  --cyan:#8fd0d6;             /* the one cool note: rain + packets */
+  --cyan:#8fd0d6;             /* the cool note: rain + packets */
   --pad:clamp(20px, 3.4vw, 56px);
   --nav-h:84px;
   --ease:cubic-bezier(.22,.61,.36,1);
@@ -45,7 +45,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ============================================================= layers */
 #gl{
   position:fixed; inset:0; width:100%; height:100%;
-  display:block; z-index:0; background:#05070a;
+  display:block; z-index:0; background:#04070c;
 }
 #grain{
   position:fixed; inset:-1px; z-index:60; pointer-events:none;
@@ -95,7 +95,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 
 /* ============================================================= preloader */
 #pre{
-  position:fixed; inset:0; z-index:100; background:#05070a;
+  position:fixed; inset:0; z-index:100; background:#04070c;
   display:flex; align-items:center; justify-content:center;
   transition:opacity .8s var(--ease), visibility .8s;
 }
@@ -203,8 +203,8 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 }
 .peek-fr{ display:block; aspect-ratio:16/10;
   background:
-    radial-gradient(58% 52% at 50% 58%, rgba(201,162,74,.30), rgba(201,162,74,.06) 46%, transparent 72%),
-    linear-gradient(180deg, #0a0f12, #070b0e 58%, #05070a);
+    radial-gradient(58% 52% at 50% 58%, rgba(25,200,255,.28), rgba(25,200,255,.06) 46%, transparent 72%),
+    linear-gradient(180deg, #071019, #050b14 58%, #04070c);
   outline:1px solid rgba(223,231,224,.16); outline-offset:-1px;
   box-shadow:0 34px 70px -30px rgba(0,0,0,.9); transition:outline-color .5s; }
 .peek:hover{ transform:translate3d(0,-5px,0); }
@@ -284,23 +284,13 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   transition:outline-color .5s var(--ease);
 }
 .card:hover .card-fr{ outline-color:rgba(223,231,224,.30); }
-.card:nth-child(1) .card-fr{
-  background:
-    radial-gradient(52% 48% at 50% 42%, rgba(201,162,74,.24), rgba(201,162,74,.05) 46%, transparent 70%),
-    linear-gradient(180deg,#0b1114 36%,#06090c 100%);
-}
-.card:nth-child(2) .card-fr{
-  background:
-    radial-gradient(30% 34% at 50% 60%, rgba(255,138,60,.30), rgba(255,138,60,.05) 52%, transparent 72%),
-    linear-gradient(180deg,#0c1214 36%,#06090c 100%);
-}
+.card:nth-child(1) .card-fr,
+.card:nth-child(2) .card-fr,
 .card:nth-child(3) .card-fr{
-  background:
-    radial-gradient(46% 40% at 50% 26%, rgba(143,208,214,.18), rgba(143,208,214,.04) 48%, transparent 70%),
-    linear-gradient(180deg,#0b1114 36%,#06090c 100%);
+  background:transparent;
 }
-.card-fr::after{ content:''; position:absolute; inset:0;
-  background:linear-gradient(transparent 46%, rgba(4,6,9,.80)); pointer-events:none; }
+.card-fr::after{ content:''; position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(transparent 64%, rgba(4,6,9,.40)); }
 /* The fabric overdraws its card by CL_BLEED on every side so the billow and
    the contact shadow have somewhere to go, so the frame cannot clip it. The
    card's outline is not here at all: it is drawn in the cloth shader, where it
@@ -352,7 +342,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 @media (prefers-reduced-motion:reduce){
   .glow, .glow::before{ animation:none; }
 }
-.no-webgl .card-fr{ background:linear-gradient(150deg,#101a1d,#0a0d10 62%,#1a0c0b); }
+.no-webgl .card-fr{ background:linear-gradient(150deg,#0b1520,#050b12 62%,#140a18); }
 /* If WebGL will not start, the page stays a page: the scene simply becomes a
    still, and the wordmark moves from the 3-D layer into the document. */
 .word-fb{ display:none; }
@@ -360,16 +350,16 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 /* fixed, or the gradient is measured against a 6000-pixel body box and the
    moon ends up somewhere around the curriculum table */
 .no-webgl body{ background:
-  radial-gradient(11vw 11vw at 73% 17%, rgba(201,162,74,.95), rgba(150,110,40,.62) 44%, rgba(80,60,20,.20) 64%, transparent 72%),
-  radial-gradient(38vw 32vw at 50% 46%, rgba(255,138,60,.40), rgba(120,70,24,.18) 54%, transparent 74%),
-  radial-gradient(120% 80% at 50% 0%, rgba(120,180,190,.16), transparent 60%), #05070a;
+  radial-gradient(11vw 11vw at 73% 17%, rgba(25,200,255,.32), rgba(14,90,140,.32) 44%, rgba(8,40,70,.12) 64%, transparent 72%),
+  radial-gradient(38vw 32vw at 50% 46%, rgba(255,43,214,.22), rgba(120,20,100,.12) 54%, transparent 74%),
+  radial-gradient(120% 80% at 50% 0%, rgba(25,200,255,.10), transparent 60%), #04070c;
   background-attachment:fixed; }
-.no-webgl .peek-fr{ background:radial-gradient(60% 55% at 50% 60%, rgba(201,162,74,.35), rgba(70,52,18,.12) 46%, #0a0f12); }
+.no-webgl .peek-fr{ background:radial-gradient(60% 55% at 50% 60%, rgba(25,200,255,.28), rgba(10,60,90,.10) 46%, #06101a); }
 .no-webgl .word-fb{
   display:block; position:absolute; left:0; right:0; bottom:16%; z-index:1;
   font-family:'Onest',sans-serif; font-weight:700; font-size:21.4vw; line-height:.78;
   letter-spacing:.20em; text-align:center; pointer-events:none;
-  background:linear-gradient(#e2ece5, #97a89c); -webkit-background-clip:text; background-clip:text;
+  background:linear-gradient(#e8f7ff, #7fb4d8); -webkit-background-clip:text; background-clip:text;
   color:transparent;
 }
 /* The live hero has no foot scrim, but the fallback still needs one: there it
@@ -401,7 +391,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   cursor:pointer; transition:padding .5s var(--ease-out);
 }
 .les::before{ content:''; position:absolute; left:calc(var(--pad) * -1); right:0; top:0; bottom:0;
-  background:linear-gradient(90deg, rgba(224,35,28,.09), transparent 46%);
+  background:linear-gradient(90deg, rgba(25,200,255,.09), transparent 46%);
   opacity:0; transition:opacity .55s var(--ease); pointer-events:none; }
 .les:hover::before{ opacity:1; }
 .les:hover{ padding-left:clamp(8px,1.2vw,18px); }
@@ -639,17 +629,16 @@ body[data-layout-footer="b"] .foot-base{ display:grid; grid-template-columns:1fr
 body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 /* ================================================= foreground layers (YALEED)
-   The transparent PNG library in secret-pathways-assets/foreground/png is
-   introduced as a near plane. Each section carries one .fg box holding a few
-   cut-outs that stand between the live sanctuary and the reading: the scene
-   itself is untouched, this is only the garden that grows in front of it.
+   Each section carries one .fg box holding a few dark gradient plates that
+   stand between the live scene and the reading: the scene itself is
+   untouched, this is only the near plane that grows in front of it.
 
    The cut-outs are the nearest plane on the page, so they sit in front of the
    reading rather than behind it. Inside .page — itself z-index:10, above the
    #gl canvas at 0:
      -1   .sec::before / .foot::before   the section scrims
       2   headings, copy, links, cards, stats, CTA
-      3   .fg                            the cut-outs: aria-hidden, inert
+      3   .fg                            the plates: aria-hidden, inert
    .page caps everything it holds at tier 10, which is under the fixed
    furniture (rail 45, nav 50), so the chapter's live near plane is moved out
    to #fg-sky at 52 — over the layout and the navigation both, and still under
@@ -690,13 +679,8 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   z-index:52; pointer-events:none;
 }
 .sec > *:not(.fg), .foot > *:not(.fg){ position:relative; z-index:2; }
-.fg-el{ position:absolute; display:block; opacity:0; }
-.fg-el > img{
-  width:100%; height:auto;   /* the width/height attrs hold the box before the lazy image lands */
-  opacity:1;
-  filter:saturate(.88) brightness(.86);
-}
-.fg-el--flip > img{ transform:scaleX(-1); }
+.fg-el{ position:absolute; display:block; opacity:0;
+  background:linear-gradient(180deg, rgba(5,12,22,0), rgba(2,4,8,.85)); }
 /* each piece waits off the edge it is anchored to until its chapter is called */
 [data-fg-in="up"]   { transform:translate3d(0,13%,0); }
 [data-fg-in="left"] { transform:translate3d(-11%,6%,0); }
@@ -737,33 +721,65 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
    the foot of the frame, not slack in the file — the ground-sitting pieces
    carry enough of it that their base line never lifts off the edge. */
 
-/* — I · input: a pine holds the far edge, and one bank of grass closes the
+/* — I · input: a dark veil holds the far edge, and one bank closes the
      foot of the chapter */
-[data-fg="gate"] .fg-pine  { right:-4%; bottom:-46px; width:clamp(190px,21vw,370px); }
-[data-fg="gate"] .fg-grass { left:3%;   bottom:-150px; width:clamp(420px,60vw,1050px); }
+[data-fg="gate"] .fg-pine  { right:-4%; bottom:-46px; width:clamp(190px,21vw,370px);
+  aspect-ratio:1024/1438;
+  background:linear-gradient(180deg, rgba(8,18,30,.92), rgba(2,5,10,.55)); }
+[data-fg="gate"] .fg-grass { left:3%;   bottom:-150px; width:clamp(420px,60vw,1050px);
+  aspect-ratio:1717/916;
+  background:linear-gradient(180deg, rgba(5,11,20,0), rgba(2,5,9,.82)); }
 
-/* — II · agents: sakura and maple sweep in from the two lower corners and
-     carry their whole length, a low bush holds the near edge */
-[data-fg="pathways"] .fg-sakura { left:-6%;  bottom:-86px;  width:clamp(430px,50vw,880px); }
-[data-fg="pathways"] .fg-leaves { right:-6%; bottom:-62px;  width:clamp(330px,38vw,670px); }
-[data-fg="pathways"] .fg-bush   { right:-4%; bottom:-38px;  width:clamp(250px,30vw,530px); }
-[data-fg="pathways"] .fg-leaves > img{ transform-origin:100% 40%; }
+/* — II · agents: two hologram-edged veils sweep in from the lower corners,
+     a low band holds the near edge */
+[data-fg="pathways"] .fg-sakura { left:-6%;  bottom:-86px;  width:clamp(430px,50vw,880px);
+  aspect-ratio:1536/1024;
+  background:linear-gradient(180deg, rgba(25,200,255,.05), rgba(3,7,13,0) 30%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.85)); }
+[data-fg="pathways"] .fg-leaves { right:-6%; bottom:-62px;  width:clamp(330px,38vw,670px);
+  aspect-ratio:1536/1024;
+  background:linear-gradient(180deg, rgba(255,43,214,.05), rgba(3,7,13,0) 30%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.85)); }
+[data-fg="pathways"] .fg-bush   { right:-4%; bottom:-38px;  width:clamp(250px,30vw,530px);
+  aspect-ratio:1717/876;
+  background:radial-gradient(120% 90% at 70% 100%, rgba(25,200,255,.05), rgba(2,4,8,0) 62%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.9)); }
 
-/* — III · devices: basalt brackets the atlas and a stand of grass ties the
-     two together, both below the plate grid */
-[data-fg="lessons"] .fg-stones { left:-4%;  bottom:-48px; width:clamp(250px,30vw,530px); }
-[data-fg="lessons"] .fg-grass  { left:24%;  bottom:-84px; width:clamp(280px,33vw,580px); }
+/* — III · devices: a magenta-edged veil brackets the atlas and a dark band
+     ties the two together, both below the plate grid */
+[data-fg="lessons"] .fg-stones { left:-4%;  bottom:-48px; width:clamp(250px,30vw,530px);
+  aspect-ratio:1536/996;
+  background:linear-gradient(180deg, rgba(255,43,214,.04), rgba(3,7,13,0) 35%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.9)); }
+[data-fg="lessons"] .fg-grass  { left:24%;  bottom:-84px; width:clamp(280px,33vw,580px);
+  aspect-ratio:1717/916;
+  background:linear-gradient(180deg, rgba(5,11,20,0), rgba(2,5,9,.82)); }
 
-/* — IV · edge: a far hill closes the horizon, grass banks the right, one
-     branch hangs into the corner */
-[data-fg="eternity"] .fg-hill   { left:-8%; width:min(150vh,116%); bottom:calc(-1 * min(20vh,15.5vw)); }
-[data-fg="eternity"] .fg-grass  { right:-7%; bottom:-60px; width:clamp(300px,37vw,670px); }
-[data-fg="eternity"] .fg-sakura { left:-15%; bottom:-70px; width:clamp(280px,33vw,580px); }
+/* — IV · edge: a far hill closes the horizon, a bank on the right, one
+     cyan edge hanging into the corner */
+[data-fg="eternity"] .fg-hill   { left:-8%; width:min(150vh,116%); bottom:calc(-1 * min(20vh,15.5vw));
+  aspect-ratio:1774/887;
+  background:linear-gradient(180deg, rgba(8,17,29,.88), rgba(2,4,8,.5)); }
+[data-fg="eternity"] .fg-grass  { right:-7%; bottom:-60px; width:clamp(300px,37vw,670px);
+  aspect-ratio:1717/916;
+  background:linear-gradient(180deg, rgba(5,11,20,0), rgba(2,5,9,.82)); }
+[data-fg="eternity"] .fg-sakura { left:-15%; bottom:-70px; width:clamp(280px,33vw,580px);
+  aspect-ratio:1536/1024;
+  background:linear-gradient(180deg, rgba(25,200,255,.05), rgba(3,7,13,0) 30%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.85)); }
 
-/* — colophon: one restrained planting along the lower edge, nothing above it */
-[data-fg="foot"] .fg-bush   { left:-6%;  bottom:-110px; width:clamp(230px,28vw,480px); }
-[data-fg="foot"] .fg-grass  { right:-5%; bottom:-98px;  width:clamp(255px,30vw,530px); }
-[data-fg="foot"] .fg-stones { left:36%;  bottom:-104px; width:clamp(190px,22vw,370px); }
+/* — colophon: one restrained band along the lower edge, nothing above it */
+[data-fg="foot"] .fg-bush   { left:-6%;  bottom:-110px; width:clamp(230px,28vw,480px);
+  aspect-ratio:1717/876;
+  background:radial-gradient(120% 90% at 70% 100%, rgba(25,200,255,.05), rgba(2,4,8,0) 62%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.9)); }
+[data-fg="foot"] .fg-grass  { right:-5%; bottom:-98px;  width:clamp(255px,30vw,530px);
+  aspect-ratio:1717/916;
+  background:linear-gradient(180deg, rgba(5,11,20,0), rgba(2,5,9,.82)); }
+[data-fg="foot"] .fg-stones { left:36%;  bottom:-104px; width:clamp(190px,22vw,370px);
+  aspect-ratio:1536/996;
+  background:linear-gradient(180deg, rgba(255,43,214,.04), rgba(3,7,13,0) 35%),
+             linear-gradient(180deg, rgba(4,9,17,0), rgba(2,4,8,.9)); }
 
 @media (max-width:1080px){
   /* the columns have collapsed and the copy has taken the width back, so the
@@ -881,7 +897,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   <div class="pre-in">
     <div class="pre-mark">
       <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
-        <circle cx="22" cy="24" r="9.5" stroke="#c9a24a" stroke-width="1.2"/>
+        <circle cx="22" cy="24" r="9.5" stroke="#19c8ff" stroke-width="1.2"/>
         <path d="M6 12h32M9.5 17h25M22 8v28" stroke="#dfe7e0" stroke-width="1.2"/>
       </svg>
     </div>
@@ -897,7 +913,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <header class="nav" id="nav">
   <a class="brand" href="#top" data-cursor>
     <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
-      <circle cx="22" cy="25" r="8.6" fill="#c9a24a" fill-opacity=".9"/>
+      <circle cx="22" cy="25" r="8.6" fill="#19c8ff" fill-opacity=".9"/>
       <path d="M5 13h34M9 18.4h26M22 8.5v27" stroke="#dfe7e0" stroke-width="1.5"/>
       <path d="M14 35.5h16" stroke="#dfe7e0" stroke-width="1.2" stroke-opacity=".6"/>
     </svg>
@@ -962,12 +978,8 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <section class="sec" id="gate" data-cam="1">
   <!-- foreground: the pine at the edge, the grass last -->
   <div class="fg" data-fg="gate" aria-hidden="true">
-    <span class="fg-el fg-pine" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/pine-tree.webp" alt="" width="1024" height="1438" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
+    <span class="fg-el fg-pine" data-fg-in="right"></span>
+    <span class="fg-el fg-grass" data-fg-in="up"></span>
   </div>
   <div class="sec-head" data-rv="fade">
     <span class="k"><b>01</b> — Input</span><span class="rule"></span>
@@ -999,15 +1011,9 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <section class="sec" id="pathways" data-cam="2">
   <!-- foreground: the garden frames the mosaic from the sides and the two lower corners -->
   <div class="fg" data-fg="pathways" aria-hidden="true">
-    <span class="fg-el fg-sakura fg-el--sway" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-leaves fg-el--sway" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/maple-leaves.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-bush" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
-    </span>
+    <span class="fg-el fg-sakura fg-el--sway" data-fg-in="left"></span>
+    <span class="fg-el fg-leaves fg-el--sway" data-fg-in="right"></span>
+    <span class="fg-el fg-bush" data-fg-in="up"></span>
   </div>
   <div class="sec-head" data-rv="fade">
     <span class="k"><b>02</b> — Agents</span><span class="rule"></span>
@@ -1016,7 +1022,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     <article class="card" data-rv="up" data-view="0" data-cursor>
       <div class="card-fr" data-frame>
                 <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
-        <i class="glow" style="--gx:80.2%; --gy:23.9%; --gr:22%; --gt:6.1s; --gt2:9.7s; --gc1:rgba(255,190,120,.50); --gc2:rgba(201,140,60,.20)"></i>
+        <i class="glow" style="--gx:80.2%; --gy:23.9%; --gr:22%; --gt:6.1s; --gt2:9.7s; --gc1:rgba(120,230,255,.50); --gc2:rgba(25,200,255,.20)"></i>
         <div class="card-lab"><b>Boot</b><span>StarkAgent</span></div>
       </div>
       <div class="card-meta"><span>The machine wakes</span><span>01 / 03</span></div>
@@ -1024,7 +1030,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     <article class="card" data-rv="up" data-view="1" data-cursor>
       <div class="card-fr" data-frame>
                 <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
-        <i class="glow glow--flame" style="--gx:70.5%; --gy:47.2%; --gr:14%; --gt:3.7s; --gt2:5.3s; --gc1:rgba(255,198,124,.62); --gc2:rgba(226,118,40,.30)"></i>
+        <i class="glow glow--flame" style="--gx:70.5%; --gy:47.2%; --gr:14%; --gt:3.7s; --gt2:5.3s; --gc1:rgba(255,110,230,.55); --gc2:rgba(255,43,214,.30)"></i>
         <div class="card-lab"><b>Agents</b><span>opencode fallback</span></div>
       </div>
       <div class="card-meta"><span>Jobs queue</span><span>02 / 03</span></div>
@@ -1032,7 +1038,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     <article class="card" data-rv="up" data-view="2" data-cursor>
       <div class="card-fr" data-frame>
                 <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
-        <i class="glow" style="--gx:48.0%; --gy:16.8%; --gr:20%; --gt:7.3s; --gt2:11.2s; --gc1:rgba(255,180,110,.50); --gc2:rgba(201,130,54,.20)"></i>
+        <i class="glow" style="--gx:48.0%; --gy:16.8%; --gr:20%; --gt:7.3s; --gt2:11.2s; --gc1:rgba(120,230,255,.45); --gc2:rgba(25,200,255,.18)"></i>
         <div class="card-lab"><b>Core</b><span>server disc</span></div>
       </div>
       <div class="card-meta"><span>The core disc</span><span>03 / 03</span></div>
@@ -1042,14 +1048,10 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 <!-- ============================================================ chapter III -->
 <section class="sec" id="lessons" data-cam="3">
-  <!-- foreground: a low periphery for the atlas — basalt and one stand of grass -->
+  <!-- foreground: a low periphery for the atlas -->
   <div class="fg" data-fg="lessons" aria-hidden="true">
-    <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
+    <span class="fg-el fg-stones" data-fg-in="up"></span>
+    <span class="fg-el fg-grass" data-fg-in="up"></span>
   </div>
   <div class="sec-head" data-rv="fade">
     <span class="k"><b>03</b> — Devices</span><span class="rule"></span>
@@ -1091,15 +1093,9 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <section class="sec fin" id="eternity" data-cam="4">
   <!-- foreground: the closing horizon: hill, grass, and the last branch -->
   <div class="fg" data-fg="eternity" aria-hidden="true">
-    <span class="fg-el fg-hill" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/hill.webp" alt="" width="1774" height="887" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-sakura" data-fg-in="left">
-      <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
-    </span>
+    <span class="fg-el fg-hill" data-fg-in="up"></span>
+    <span class="fg-el fg-grass" data-fg-in="up"></span>
+    <span class="fg-el fg-sakura" data-fg-in="left"></span>
   </div>
   <div class="eyebrow" data-rv="fade">Chapter 04 — Edge</div>
   <h2 class="display" data-rv="up">Edge</h2>
@@ -1115,20 +1111,14 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <footer class="foot" data-cam="5">
   <!-- foreground: one planting along the lower edge of the colophon -->
   <div class="fg" data-fg="foot" aria-hidden="true">
-    <span class="fg-el fg-bush" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-grass" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/tall-grass.webp" alt="" width="1717" height="916" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
-    </span>
+    <span class="fg-el fg-bush" data-fg-in="up"></span>
+    <span class="fg-el fg-grass" data-fg-in="up"></span>
+    <span class="fg-el fg-stones" data-fg-in="up"></span>
   </div>
   <div class="foot-grid">
     <div class="foot-brand">
       <svg viewBox="0 0 44 44" fill="none" width="34" height="34" aria-hidden="true">
-        <circle cx="22" cy="25" r="8.6" fill="#c9a24a" fill-opacity=".9"/>
+        <circle cx="22" cy="25" r="8.6" fill="#19c8ff" fill-opacity=".9"/>
         <path d="M5 13h34M9 18.4h26M22 8.5v27" stroke="#dfe7e0" stroke-width="1.5"/>
       </svg>
       <p>A four-chapter night walk through a live local network. Gamepads into controllers, PCs into
@@ -1285,7 +1275,7 @@ function normalFromHeight(hc, strength) {
 }
 
 /* ------------------------------------------------------- 2 · surfaces */
-/* long, wet, board-formed concrete — the sanctuary walls */
+/* long, wet, board-formed concrete — the datum walls */
 function texWall() {
   const W = 1024, H = 1024;
   const c = cvs(W, H), x = c.getContext('2d');
@@ -1705,7 +1695,7 @@ function texShoji() {
   return c;
 }
 
-/* one maple leaf, white on transparent — tinted per instance */
+/* one packet leaf, white on transparent — tinted per instance */
 function texLeaf() {
   const S = 128, c = cvs(S, S), x = c.getContext('2d');
   x.translate(S / 2, S * .92); x.scale(S / 2.2, -S / 2.2);
@@ -2237,7 +2227,7 @@ const HI = qs('q', COARSE ? 'low' : 'high');
 const LOW = HI === 'low';
 const WANT_POST    = qs('post', '1') !== '0';
 const WANT_SHADOW  = qs('shadow', LOW ? '0' : '1') !== '0';
-const DPR_CAP      = qn('dpr', LOW ? 1.4 : 1.8);
+const DPR_CAP      = qn('dpr', LOW ? 1.5 : 1.75);
 /* the renderer trades resolution for frame rate on its own — the scene is
    fill-bound (five big alpha-blended veils plus a bloom chain), so pixels
    are the only knob worth turning on unknown hardware */
@@ -2255,18 +2245,16 @@ function initGL() {
   renderer.outputEncoding = WANT_POST ? THREE.LinearEncoding : THREE.sRGBEncoding;
   renderer.toneMapping = WANT_POST ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
-  renderer.setClearColor(0x05070a, 1);
+  renderer.setClearColor(0x04070c, 1);
   if (WANT_SHADOW) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; }
   maxAniso = renderer.capabilities.getMaxAnisotropy();
   scene = new THREE.Scene();
-    /* Density puts the hall back in the air; the colour is what decides how
-     dark it is back there. At this depth most of the building's pixel is
-     fog rather than its own material — darkening the timber and the tiles
-     moved the hall by 0.18 of a luminance unit, the fog colour moves it
-     properly. And it reaches by distance, so the foreground does not
-     follow it down. */
-  scene.fog = new THREE.FogExp2(0x050a0e, 0.0168);
-  scene.background = new THREE.Color(0x060a0d);
+    /* Density keeps the core in the air; the colour is what decides how
+     dark it is back there. At this depth most of the structure's pixel is
+     fog rather than its own material — and it reaches by distance, so the
+     foreground does not follow it down. */
+  scene.fog = new THREE.FogExp2(0x050a14, 0.0168);
+  scene.background = new THREE.Color(0x060b12);
   camera = new THREE.PerspectiveCamera(36, vpW() / vpH(), .35, 220);
   scene.add(camera);
 }
@@ -2306,7 +2294,7 @@ function surface(t, rep, o) {
   return m;
 }
 /* The board and block libraries are generated once and shared. buildDeviceNode
-   alone is called six times, and a granite per lantern is six pointless
+   alone is called six times, and a granite per node is six pointless
    canvases and six normal-map passes at load. */
 const LIB = {};
 const lib = (k, f) => (LIB[k] || (LIB[k] = f()));
@@ -2461,10 +2449,10 @@ function buildShell() {
   const wallNrm = tx(wallT.normal, { wrap: THREE.RepeatWrapping, repeat: [4, 1.4], srgb: false });
   const wallMat = new THREE.MeshStandardMaterial({
     map: wallMap, normalMap: wallNrm, normalScale: new THREE.Vector2(.85, .85),
-    roughness: .78, metalness: .05, color: 0x525c60
+    roughness: .78, metalness: .05, color: 0x2a333f
   });
-  /* The court used to be a roofless box. It is now an open mountain approach:
-     nothing encloses the frame but the night, the ridge and the fog. */
+  /* The court used to be a roofless box. It is now an open night approach:
+     nothing encloses the frame but the dark, the ridge and the fog. */
 
   /* the sky, hung far enough back that the whole frustum sits inside it */
   const sky = new THREE.Mesh(new THREE.PlaneGeometry(360, 190),
@@ -2483,7 +2471,7 @@ function buildShell() {
       /* fog off: at a hundred metres it would lift a black silhouette to 80%
          of the fog colour, and the treeline came back as a *pale* band */
       new THREE.MeshBasicMaterial({ map: i ? tx(texRidge()) : ridgeMap, transparent: true,
-        color: i ? 0x0a1015 : 0x06090d, depthWrite: false, fog: false }));
+        color: i ? 0x0a0f16 : 0x05080e, depthWrite: false, fog: false }));
     m.position.set(r[4], r[1], r[0]); m.renderOrder = 1; scene.add(m);
   });
 
@@ -2497,14 +2485,22 @@ function buildShell() {
     /* The court used to carry a planar mirror and this was tuned to feed it —
        near-polished, and metal enough to hold a reflection. With the mirror
        gone those numbers only made the paving read as sheet metal, so it goes
-       back to being wet stone: rough, barely metallic, and lit rather than
-       reflecting. */
-    roughness: .74, metalness: .06, color: 0x69757a
+       back to being wet dark paving: rough, barely metallic, and lit rather
+       than reflecting. */
+    roughness: .74, metalness: .06, color: 0x2e3a45
   });
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), floorMat);
   floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, -18); floor.receiveShadow = true;
   scene.add(floor);
   WORLD.floor = floor; WORLD.floorMat = floorMat;
+
+  /* the hologram grid the whole court stands on — a wire read of the datum
+     plane, so the ground reads as a projection surface instead of paving */
+  const grid = new THREE.GridHelper(150, 60, 0x19c8ff, 0x19c8ff);
+  grid.position.set(0, .03, -18);
+  grid.material.transparent = true; grid.material.opacity = .30;
+  grid.material.blending = THREE.AdditiveBlending; grid.material.depthWrite = false;
+  scene.add(grid); WORLD.grid = grid;
 
   /* The podium and the flight use their own material: the mirror shader below
      is only ever attached to the water-level floor, and sharing it would make
@@ -2513,7 +2509,7 @@ function buildShell() {
   const platMat = new THREE.MeshStandardMaterial({
     map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], aniso: 16 }),
     normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], srgb: false, aniso: 16 }),
-    normalScale: new THREE.Vector2(.18, .18), roughness: .93, metalness: .02, color: 0x58636a
+    normalScale: new THREE.Vector2(.18, .18), roughness: .93, metalness: .02, color: 0x27313c
   });
   /* the podium the hall stands on */
   const plat = new THREE.Mesh(new THREE.BoxGeometry(42, PODIUM, 24), platMat);
@@ -2523,11 +2519,11 @@ function buildShell() {
   cope.position.set(0, PODIUM - .17, -45); cope.receiveShadow = true; scene.add(cope);
 
   /* The flight — a circuit ridge now: the same stepped ascent, but the cheeks
-     become glowing amber rails and each riser carries a hairline of light, so
+     become glowing cyan rails and each riser carries a hairline of light, so
      the climb reads as a powered trace instead of a stone stair. */
   const treads = [], rails = [], led = [];
-  const railMat = new THREE.MeshStandardMaterial({ color: 0x120d06, roughness: .35,
-    metalness: .72, emissive: 0xff9a3c, emissiveIntensity: 1.6 });
+  const railMat = new THREE.MeshStandardMaterial({ color: 0x061018, roughness: .35,
+    metalness: .72, emissive: 0x19c8ff, emissiveIntensity: 1.8 });
   for (let i = 0; i < STEPS; i++) {
     const y = (i + 1) * (PODIUM / STEPS), z = STAIR_Z0 - (i + .5) * STAIR_RUN;
     const w = STAIR_W + (STEPS - i) * .052;               /* splayed at the foot */
@@ -2544,111 +2540,124 @@ function buildShell() {
   stair.receiveShadow = true; stair.castShadow = true; scene.add(stair);
   const rail = new THREE.Mesh(mergeGeos(rails), railMat);
   rail.receiveShadow = true; rail.castShadow = true; scene.add(rail);
-  const ledMat = new THREE.MeshBasicMaterial({ color: hdr(2.2, 1.0, .34), fog: false, toneMapped: false });
+  const ledMat = new THREE.MeshBasicMaterial({ color: hdr(.6, 2.3, 2.8), fog: false, toneMapped: false });
   const edge = new THREE.Mesh(mergeGeos(led), ledMat);
   edge.renderOrder = 3; scene.add(edge);
   WORLD.edgeRails = { rail: rail, led: ledMat };
 }
 
-/* ------------------------------------------------------- the network core
-   A stacked tower of node modules on the podium at the head of the flight:
-   dark metal, four tapering modules with lit amber bays, gold corner studs,
-   and an antenna mast with an eyebrow ring and a blinking beacon above the
-   top module. The silhouette the whole page hangs on.                      */
-function buildTemple() {
+/* ------------------------------------------------- the hologram data core
+   A projection built on the podium at the head of the flight: a cyan data
+   crystal inside a wireframe shell, three orbital rings (two cyan, one
+   magenta), an energy beam rising through the stack and a blinking beacon
+   above it. The silhouette the whole page hangs on.                      */
+function buildCore() {
   const g = new THREE.Group();
-  /* One board library, sampled at two scales: the core's flanks want the grain
-     long and lying down, the module posts want it running their own length. */
-  const timber = surface(wallWood(), [4, 1.6], { color: 0x3a3d3f, normal: 1.5 });
-  const post   = surface(postWood(), [1.1, 1.0], { color: 0x5d6061, normal: 1.05, metalness: .03 });
-  const gold   = new THREE.MeshStandardMaterial({ color: 0x8f6f2e, roughness: .38, metalness: .78 });
-  /* the LED strip the modules burn through — warm amber, the only bright note
-     on the tower and the same hue the edge rails and the pylons carry */
-  const led = new THREE.MeshBasicMaterial({ color: hdr(2.1, .92, .30), fog: true, toneMapped: false });
-  const grille = new THREE.MeshBasicMaterial({ map: tx(texShoji()), transparent: true,
-    depthWrite: false, fog: true });
+  const F = PODIUM;                                   /* the core's floor level */
+  const dark = new THREE.MeshStandardMaterial({ color: 0x0c111a, roughness: .38, metalness: .72 });
+  /* the cyan every lit trace on the tower shares — the same hue the edge
+     rails, the pylons and the masts carry */
+  const led = new THREE.MeshBasicMaterial({ color: hdr(.55, 2.1, 2.6), fog: true, toneMapped: false });
   WORLD.paper = led;
   /* the beacon on the mast blinks separately so it can pulse in updateWorld */
-  const beaconMat = new THREE.MeshBasicMaterial({ color: hdr(2.4, 1.0, .32), fog: false, toneMapped: false });
+  const beaconMat = new THREE.MeshBasicMaterial({ color: hdr(2.4, 1.0, 2.5), fog: false, toneMapped: false });
   WORLD.beaconMat = beaconMat;
 
-  /* one lit bay: a glowing strip with the module grille hung just in front of it */
-  function bay(w, h, x, y, z) {
-    const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), led);
-    p.position.set(x, y, z); g.add(p);
-    const s = new THREE.Mesh(new THREE.PlaneGeometry(w, h), grille);
-    s.position.set(x, y, z + .06); s.renderOrder = 3; g.add(s);
+  /* the base plinth the projection stands on */
+  const sill = new THREE.Mesh(new THREE.BoxGeometry(15.0, .5, 9.2), dark);
+  sill.position.set(0, F + .25, TEMPLE_Z); sill.castShadow = true; g.add(sill);
+
+  /* the data crystal at the heart of the core — the beacon that blinks */
+  const crystal = new THREE.Mesh(new THREE.IcosahedronGeometry(2.4, 1),
+    new THREE.MeshBasicMaterial({ color: hdr(.55, 2.2, 2.6), fog: true, toneMapped: false }));
+  crystal.position.set(0, F + 3.4, TEMPLE_Z); g.add(crystal);
+  WORLD.beacon = crystal;
+
+  /* the wireframe shell that holds the projection together */
+  const shell = new THREE.Mesh(new THREE.IcosahedronGeometry(3.6, 1),
+    new THREE.MeshBasicMaterial({ color: hdr(.5, 1.9, 2.3), wireframe: true,
+      transparent: true, opacity: .16, fog: true }));
+  shell.position.set(0, F + 3.4, TEMPLE_Z); g.add(shell);
+  WORLD.rings = [shell];
+
+  /* the orbital rings — the two cyan rings and one magenta counter-rotator */
+  const ringMatA = new THREE.MeshBasicMaterial({ color: hdr(.55, 2.1, 2.6), fog: true });
+  const ringMatB = new THREE.MeshBasicMaterial({ color: hdr(2.2, .45, 2.3), fog: true });
+  [[5.0, F + 4.8, Math.PI / 2.2, ringMatA],
+   [6.3, F + 7.0, .62, ringMatB],
+   [4.2, F + 9.4, Math.PI / 2.6, ringMatA]].forEach(([r, y, tilt, mat]) => {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(r, .06, 8, 40), mat);
+    ring.position.set(0, y, TEMPLE_Z); ring.rotation.x = tilt; g.add(ring);
+    WORLD.rings.push(ring);
+  });
+
+  /* the energy beam rising through the stack */
+  const beamMat = new THREE.MeshBasicMaterial({ color: hdr(.5, 1.8, 2.2), transparent: true,
+    opacity: .5, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: true });
+  const beam = new THREE.Mesh(new THREE.CylinderGeometry(.06, .5, 14.5, 12, 1, true), beamMat);
+  beam.position.set(0, F + 7.4, TEMPLE_Z); g.add(beam);
+  WORLD.beam = beamMat;
+
+  /* six floating shards orbit the projection */
+  for (let i = 0; i < 6; i++) {
+    const a = i / 6 * TAU;
+    const sh = new THREE.Mesh(new THREE.OctahedronGeometry(.2, 0), ringMatB);
+    sh.position.set(Math.cos(a) * 7.4, F + 4.6 + Math.sin(i * 2.7) * 3.4, TEMPLE_Z + Math.sin(a) * 2.2);
+    g.add(sh); WORLD.rings.push(sh);
   }
 
-  const F = PODIUM;                                   /* the tower's floor level */
-
-  /* ---- four stacked node modules, lit bays on the front face ----------- */
-  const MOD = [[13.6, 4.4, 8.2, F + 2.2], [10.6, 4.0, 7.0, F + 6.8],
-               [8.6, 3.8, 6.0, F + 11.0], [6.8, 3.6, 5.0, F + 14.9]];
-  MOD.forEach(([mw, mh, md, my]) => {
-    const mod = new THREE.Mesh(new THREE.BoxGeometry(mw, mh, md), timber);
-    mod.position.set(0, my, TEMPLE_Z); mod.castShadow = true; g.add(mod);
-    const n = Math.max(3, Math.round((mw - 2.0) / 2.4));
-    for (let i = 0; i < n; i++) {
-      const x = -(mw / 2 - 1.0) + i * ((mw - 2.0) / (n - 1));
-      bay(.9, .42, x, my + mh / 2 - .5, TEMPLE_Z + md / 2 + .02);
-    }
-    /* corner studs, the gold note carried down the stack */
-    [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
-      const stud = new THREE.Mesh(new THREE.BoxGeometry(.30, mh - .3, .30), gold);
-      stud.position.set(sx * (mw / 2 - .35), my, TEMPLE_Z + sz * (md / 2 - .35)); g.add(stud);
-    }));
-  });
-  /* the base plinth the stack stands on */
-  const sill = new THREE.Mesh(new THREE.BoxGeometry(15.0, .46, 9.2), post);
-  sill.position.set(0, F + .23, TEMPLE_Z); g.add(sill);
-
-  /* ---- the antenna: a mast with the eyebrow ring above the top module --- */
-  const mast = new THREE.Mesh(new THREE.CylinderGeometry(.16, .26, 4.6, 12), post);
-  mast.position.set(0, F + 19.4, TEMPLE_Z); mast.castShadow = true; g.add(mast);
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.05, .09, 8, 24), gold);
-  ring.position.set(0, F + 19.4, TEMPLE_Z); ring.rotation.x = Math.PI / 2; g.add(ring);
+  /* the mast and the blinking beacon above the top of the projection */
+  const mast = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, 6.4, 8), dark);
+  mast.position.set(0, F + 15.8, TEMPLE_Z); g.add(mast);
   const tip = new THREE.Mesh(new THREE.SphereGeometry(.22, 12, 10), beaconMat);
   tip.position.set(0, F + 21.8, TEMPLE_Z); g.add(tip);
   WORLD.templeTop = F + 21.8;
 
   scene.add(g); WORLD.temple = g;
 
-  /* the glow the hall pushes out over its own steps */
+  /* the glow the core pushes out over its own steps */
   const spill = new THREE.Mesh(new THREE.PlaneGeometry(30, 16),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,150,66,.80)', 'rgba(240,96,26,.24)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(70,225,255,.80)', 'rgba(25,200,255,.24)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .30 }));
   spill.position.set(0, F + 3.0, TEMPLE_Z + 5.6); spill.renderOrder = 2;
   scene.add(spill); WORLD.hallHalo = spill;
 
-  /* the band of mist that separates the hall from the trees behind it — the
+  /* the band of haze that separates the core from the ridge behind it — the
      one thing that stops the whole background reading as a single flat cut-out */
   const mist = new THREE.Mesh(new THREE.PlaneGeometry(64, 20),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(150,178,190,.62)', 'rgba(104,138,154,.20)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(120,195,230,.55)', 'rgba(60,140,190,.18)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .17 }));
   mist.position.set(0, F - 1.4, TEMPLE_Z + 10); mist.renderOrder = 2; scene.add(mist);
 }
 
-/* ---------------------------------------------- the server disc overhead
+/* ---------------------------------------------- the server sphere overhead
    Hung well behind the core so the tower crosses its lower left — near
    enough to the ridge to sit in the haze, far enough that it never moves
-   against the buildings when the rig drifts.                             */
+   against the buildings when the rig drifts. A wireframe data globe with a
+   magenta core and one slow orbit ring.                              */
 const MOON = { x: 17.9, y: 31.9, z: -72, r: 8.6 };
-function buildMoon() {
-  const disc = new THREE.Mesh(new THREE.PlaneGeometry(MOON.r * 2, MOON.r * 2),
-    /* The whole blood-moon grade lives here, on a near-neutral albedo. The
-       plate measures G/R ≈ B/R ≈ .48, but that is a *display* ratio: the map
-       is decoded out of sRGB before this multiplies it, so the tint has to be
-       written in linear, where the same look is ≈ .21. Reading the ratio
-       straight off the reference is what left the moon a pale pink. */
-    new THREE.MeshBasicMaterial({ map: tx(texMoon()), color: hdr(3.4, 1.0, .58),
-      transparent: true, depthWrite: false, fog: false, toneMapped: false }));
-  disc.position.set(MOON.x, MOON.y, MOON.z); disc.renderOrder = 1;
-  scene.add(disc); WORLD.moon = disc;
+function buildDisc() {
+  const g = new THREE.Group();
+  /* the wireframe globe — near-neutral, the halo does the glowing */
+  const globe = new THREE.Mesh(new THREE.SphereGeometry(MOON.r * .55, 18, 14),
+    new THREE.MeshBasicMaterial({ color: hdr(.55, 2.0, 2.5), wireframe: true,
+      transparent: true, opacity: .15, fog: false, toneMapped: false }));
+  g.add(globe);
+  /* the magenta core inside it */
+  const core = new THREE.Mesh(new THREE.SphereGeometry(MOON.r * .14, 16, 12),
+    new THREE.MeshBasicMaterial({ color: hdr(2.2, .45, 2.3), fog: false, toneMapped: false }));
+  g.add(core);
+  /* one slow orbit ring around the globe */
+  const orbit = new THREE.Mesh(new THREE.TorusGeometry(MOON.r * .8, .05, 8, 48),
+    new THREE.MeshBasicMaterial({ color: hdr(.55, 2.1, 2.6), fog: false, toneMapped: false }));
+  orbit.rotation.x = Math.PI / 2.6; g.add(orbit);
+  WORLD.orbitRing = orbit;
+  g.position.set(MOON.x, MOON.y, MOON.z);
+  scene.add(g); WORLD.moon = g;
 
   /* the air around it — a wide, weak corona that the bloom picks up */
   const halo = new THREE.Mesh(new THREE.PlaneGeometry(MOON.r * 6.4, MOON.r * 6.4),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,180,110,.90)', 'rgba(220,120,40,.26)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(70,220,255,.85)', 'rgba(25,150,230,.22)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .44 }));
   halo.position.set(MOON.x, MOON.y, MOON.z - .3); halo.renderOrder = 0;
   scene.add(halo); WORLD.moonHalo = halo;
@@ -2662,106 +2671,67 @@ function placeMoon() {
   WORLD.moonHalo.position.x = x;
 }
 
-function buildTorii() {
-  /* the pair of pylons carries no chroma of its own — a dark metal gate with
-     amber beacon tips, the same warm note the ridge and the core use */
-  const lac = surface(lib('lacquer', () => texLacquer()), [2, 2],
-    { color: hdr(.72, .70, .68), roughness: .62, metalness: .28, normal: .75 });
-  const gold = new THREE.MeshStandardMaterial({ color: 0x8f6f2e, roughness: .38, metalness: .78 });
-  const beacon = new THREE.MeshBasicMaterial({ color: hdr(2.4, 1.0, .32), fog: false, toneMapped: false });
+function buildPylons() {
+  /* the pair of pylons is a dark frame with cyan hologram edges and magenta
+     tips — the same twin notes the core and the masts carry */
+  const frame = new THREE.MeshStandardMaterial({ color: 0x06101a, roughness: .4, metalness: .6,
+    emissive: 0x19c8ff, emissiveIntensity: 1.1 });
+  const cyan = new THREE.MeshBasicMaterial({ color: hdr(.55, 2.1, 2.6), fog: false, toneMapped: false });
+  const beacon = new THREE.MeshBasicMaterial({ color: hdr(2.3, .45, 2.4), fog: false, toneMapped: false });
   const g = new THREE.Group();
   const BASE = .78, H = 8.2, SPAN = 3.55;
 
   [-1, 1].forEach(s => {
-    const col = new THREE.Mesh(new THREE.CylinderGeometry(.30, .38, H, 26), lac);
+    const col = new THREE.Mesh(new THREE.CylinderGeometry(.12, .16, H, 12), frame);
     col.position.set(s * SPAN, BASE + H / 2, 0); col.castShadow = true; g.add(col);
-    const foot = new THREE.Mesh(new THREE.CylinderGeometry(.46, .50, .52, 26), gold);
-    foot.position.set(s * SPAN, BASE + .26, 0); foot.castShadow = true; g.add(foot);
-    const collar = new THREE.Mesh(new THREE.CylinderGeometry(.345, .345, .26, 26), gold);
-    collar.position.set(s * SPAN, BASE + H - 1.42, 0); g.add(collar);
-    /* the ornate bracket where the beams cross the column */
-    const br = new THREE.Mesh(new THREE.BoxGeometry(.86, .30, .86), gold);
-    br.position.set(s * SPAN, BASE + H - .72, 0); g.add(br);
-    const br2 = new THREE.Mesh(new THREE.BoxGeometry(.60, .52, .60), gold);
-    br2.position.set(s * SPAN, BASE + H - .34, 0); g.add(br2);
-    [-1, 1].forEach(d => {
-      const wing = new THREE.Mesh(new THREE.BoxGeometry(.24, .70, .18), gold);
-      wing.position.set(s * SPAN + d * .40, BASE + H - .62, .30); g.add(wing);
-      const wing2 = wing.clone(); wing2.position.z = -.30; g.add(wing2);
-    });
+    const foot = new THREE.Mesh(new THREE.TorusGeometry(.28, .03, 6, 24), cyan);
+    foot.position.set(s * SPAN, BASE + .06, 0); foot.rotation.x = Math.PI / 2; g.add(foot);
+    /* the diamond tip on each pylon */
+    const tip = new THREE.Mesh(new THREE.OctahedronGeometry(.22, 0), beacon);
+    tip.position.set(s * SPAN, BASE + H + .14, 0); g.add(tip);
   });
 
-  /* nuki — the straight beam that pierces the columns */
-  const nuki = new THREE.Mesh(new THREE.BoxGeometry(9.4, .52, .46), lac);
-  nuki.position.set(0, BASE + H - 2.15, 0); nuki.castShadow = true; g.add(nuki);
+  /* the two crowning bars — a cyan beam and a thin magenta trace above it */
+  const nuki = new THREE.Mesh(new THREE.BoxGeometry(9.4, .16, .16), frame);
+  nuki.position.set(0, BASE + H - .5, 0); nuki.castShadow = true; g.add(nuki);
+  const trace = new THREE.Mesh(new THREE.BoxGeometry(7.6, .07, .07), beacon);
+  trace.position.set(0, BASE + H - .16, 0); g.add(trace);
 
-  /* gakuzuka — the little strut at the centre */
-  const gak = new THREE.Mesh(new THREE.BoxGeometry(.46, 1.22, .40), lac);
-  gak.position.set(0, BASE + H + .10, 0); g.add(gak);
-  const gakG = new THREE.Mesh(new THREE.BoxGeometry(.60, .18, .50), gold);
-  gakG.position.set(0, BASE + H + .68, 0); g.add(gakG);
+  /* the crown diamond above the centre */
+  const crown = new THREE.Mesh(new THREE.OctahedronGeometry(.34, 0), beacon);
+  crown.position.set(0, BASE + H + .62, 0); g.add(crown);
 
-  /* shimaki + kasagi — the two crowning beams, swept upward at the ends */
-  function beamPath(half, rise, power) {
-    const p = [];
-    for (let i = 0; i <= 26; i++) {
-      const u = i / 26 * 2 - 1;
-      p.push(new THREE.Vector3(u * half, Math.pow(Math.abs(u), power) * rise, 0));
-    }
-    return p;
-  }
-  const shimaki = new THREE.Mesh(sweepPoly(beamPath(5.05, .40, 2.6),
-    [[-.30, -.19], [.30, -.19], [.32, .06], [.28, .21], [-.28, .21], [-.32, .06]]), lac);
-  shimaki.position.set(0, BASE + H - .52, 0); shimaki.castShadow = true; g.add(shimaki);
-
-  const kasagi = new THREE.Mesh(sweepPoly(beamPath(5.85, .62, 2.4),
-    [[-.42, -.24], [.42, -.24], [.46, .04], [.30, .28], [-.30, .28], [-.46, .04]]), lac);
-  kasagi.position.set(0, BASE + H + .96, 0); kasagi.castShadow = true; g.add(kasagi);
-  /* a black lacquer cap along the top of the kasagi */
-  const cap = new THREE.Mesh(sweepPoly(beamPath(5.95, .62, 2.4),
-    [[-.48, .22], [.48, .22], [.48, .34], [-.48, .34]]),
-    new THREE.MeshStandardMaterial({ color: 0x120c0c, roughness: .42, metalness: .14 }));
-  cap.position.set(0, BASE + H + .96, 0); g.add(cap);
-
-  /* the gate stands at the foot of the flight, not over the court — small
-     enough that the hall keeps the top of the frame to itself */
-  /* The lowest thing on the gate is the foot of each column, and it starts
-     at BASE — so anchoring the group at y=0 left the whole torii hanging
-     BASE*scale above the court. Drop it by exactly that and the feet land. */
-  /* beacon tips on the two pylons */
-  [-1, 1].forEach(s => {
-    const b = new THREE.Mesh(new THREE.SphereGeometry(.14, 10, 8), beacon);
-    b.position.set(s * SPAN, BASE + H + .06, 0); g.add(b);
-  });
+  /* the frame stands at the foot of the flight, not over the court — small
+     enough that the core keeps the top of the frame to itself */
   const GS = .72;
   g.position.set(0, -BASE * GS, -8.6); g.scale.setScalar(GS);
   scene.add(g); WORLD.torii = g;
 }
 
 function buildDeviceNode(x, z, s, y) {
-  const shell = surface(postWood(), [1.1, 1.0],
-    { color: 0x3a3e40, metalness: .22, normal: .85, roughness: .5 });
+  const post = new THREE.MeshStandardMaterial({ color: 0x0c111a, roughness: .45, metalness: .55 });
   const g = new THREE.Group();
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(.50, .58, .30, 20), shell);
-  base.position.y = .15; base.castShadow = true; g.add(base);
-  /* the node body — a pillar standing where the lantern stood, capped with a
-     status pane on the front face */
-  const body = new THREE.Mesh(new THREE.CylinderGeometry(.30, .34, 1.0, 20), shell);
-  body.position.y = .90; body.castShadow = true; g.add(body);
-  const cap = new THREE.Mesh(new THREE.BoxGeometry(.50, .16, .50), shell);
-  cap.position.y = 1.48; g.add(cap);
-  const paneMat = new THREE.MeshBasicMaterial({ color: hdr(2.3, .30, .085), fog: false, toneMapped: false });
-  const pane = new THREE.Mesh(new THREE.PlaneGeometry(.34, .34), paneMat);
-  pane.position.set(0, 1.66, .256); g.add(pane);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(.22, .26, .07, 12), post);
+  base.position.y = .035; base.castShadow = true; g.add(base);
+  /* the pylon — a thin stand carrying a floating diamond data node */
+  const pylon = new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, 1.15, 8), post);
+  pylon.position.y = .62; g.add(pylon);
+  const diamond = new THREE.Mesh(new THREE.OctahedronGeometry(.30, 0),
+    new THREE.MeshStandardMaterial({ color: 0x0a1a26, roughness: .3, metalness: .5,
+      emissive: 0x19c8ff, emissiveIntensity: 1.4 }));
+  diamond.position.y = 1.66; diamond.castShadow = true; g.add(diamond);
+  const paneMat = new THREE.MeshBasicMaterial({ color: hdr(.55, 2.1, 2.6), fog: false, toneMapped: false });
+  const pane = new THREE.Mesh(new THREE.PlaneGeometry(.20, .20), paneMat);
+  pane.position.set(0, 1.50, .245); g.add(pane);
   WORLD.lanternPane = WORLD.lanternPane || paneMat;
 
   const glow = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,120,60,.9)', 'rgba(255,60,24,.28)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(80,225,255,.9)', 'rgba(25,200,255,.28)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .5 }));
   glow.position.y = 1.66; glow.renderOrder = 2; g.add(glow);
   glow.userData.billboard = true;
 
-  const lt = new THREE.PointLight(0xff5a24, 2.6, 9, 2);
+  const lt = new THREE.PointLight(0x2ad4ff, 2.6, 9, 2);
   lt.position.set(0, 1.66, 0); g.add(lt);
   WORLD.lanternLights = WORLD.lanternLights || [];
   WORLD.lanternLights.push(lt); WORLD.lanternGlows = WORLD.lanternGlows || []; WORLD.lanternGlows.push(glow);
@@ -2771,7 +2741,7 @@ function buildDeviceNode(x, z, s, y) {
   return g;
 }
 
-/* the cable runs that tie the device nodes together — thin amber fibres
+/* the cable runs that tie the device nodes together — thin cyan fibres
    strung between every pair, so the network reads as a network */
 function buildCables(nodes) {
   const pts = [];
@@ -2786,95 +2756,52 @@ function buildCables(nodes) {
     }
   const geo = new THREE.BufferGeometry().setFromPoints(pts);
   const cable = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({
-    color: hdr(1.6, .74, .24), fog: true, transparent: true, opacity: .5 }));
+    color: hdr(.55, 2.1, 2.7), fog: true, transparent: true, opacity: .5 }));
   cable.frustumCulled = false;
   scene.add(cable); WORLD.cables = cable;
 }
 
-function buildMaple(seed, x, z, scale) {
+function buildMast(seed, x, z, scale) {
   const rnd = mulberry32(seed);
-  const parts = [], tips = [];
-  const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0);
-  const dir = new THREE.Vector3(), pos = new THREE.Vector3();
-
-  function seg(from, to, r0, r1) {
-    dir.subVectors(to, from);
-    const len = dir.length(); dir.normalize();
-    const geo = new THREE.CylinderGeometry(r1, r0, len, 6, 1, true);
-    Q.setFromUnitVectors(UP, dir);
-    pos.addVectors(from, to).multiplyScalar(.5);
-    M.compose(pos, Q, new THREE.Vector3(1, 1, 1));
-    geo.applyMatrix4(M);
-    parts.push(geo);
-  }
-  function branch(from, dirV, len, rad, depth) {
-    const to = from.clone().addScaledVector(dirV, len);
-    to.y += len * .10;
-    seg(from, to, rad, rad * .68);
-    if (depth >= 4 || len < .34) { tips.push(to.clone()); return; }
-    const n = depth < 2 ? 3 : 2;
-    for (let i = 0; i < n; i++) {
-      const d = dirV.clone();
-      d.x += (rnd() - .5) * 1.25; d.z += (rnd() - .5) * 1.25; d.y += .30 + rnd() * .5;
-      d.normalize();
-      branch(to, d, len * (.62 + rnd() * .16), rad * .66, depth + 1);
-    }
-  }
-  const root = new THREE.Vector3(0, 0, 0);
-  seg(root, new THREE.Vector3(0, 1.5, 0), .22, .16);
-  for (let i = 0; i < 4; i++) {
-    const a = i / 4 * TAU + rnd();
-    branch(new THREE.Vector3(0, 1.5, 0), new THREE.Vector3(Math.cos(a) * .8, .8, Math.sin(a) * .8).normalize(), 1.45, .155, 0);
-  }
-  const trunk = new THREE.Mesh(mergeGeos(parts),
-    new THREE.MeshStandardMaterial({ color: 0x171413, roughness: .94, metalness: .0, side: THREE.DoubleSide }));
-  trunk.castShadow = true;
-
-  const leafGeo = new THREE.PlaneGeometry(.36, .36);
-  const leafMat = new THREE.MeshStandardMaterial({
-    map: tx(texLeaf()), color: 0x2b0406, alphaTest: .42, side: THREE.DoubleSide,
-    roughness: .86, metalness: 0, emissive: 0x080000, emissiveIntensity: .12
-  });
-  const per = LOW ? 5 : 9;
-  const inst = new THREE.InstancedMesh(leafGeo, leafMat, tips.length * per);
-  const m4 = new THREE.Matrix4(), e = new THREE.Euler(), q2 = new THREE.Quaternion(), sc = new THREE.Vector3();
-  let k = 0;
-  tips.forEach(t => {
-    for (let i = 0; i < per; i++) {
-      const p = new THREE.Vector3(t.x + (rnd() - .5) * .95, t.y + (rnd() - .5) * .8, t.z + (rnd() - .5) * .95);
-      e.set(rnd() * TAU, rnd() * TAU, rnd() * TAU);
-      q2.setFromEuler(e);
-      const s = .7 + rnd() * .75; sc.set(s, s, s);
-      m4.compose(p, q2, sc);
-      inst.setMatrixAt(k++, m4);
-    }
-  });
-  inst.instanceMatrix.needsUpdate = true;
-  inst.castShadow = false; inst.frustumCulled = false;
+  const dark = new THREE.MeshStandardMaterial({ color: 0x0c111a, roughness: .45, metalness: .55 });
+  const armMat = new THREE.MeshStandardMaterial({ color: 0x0a1a26, roughness: .3, metalness: .5,
+    emissive: 0x19c8ff, emissiveIntensity: 1.2 });
+  const cyan = new THREE.MeshBasicMaterial({ color: hdr(.55, 2.1, 2.6), fog: false, toneMapped: false });
+  const beaconMat = new THREE.MeshBasicMaterial({ color: hdr(2.3, .45, 2.4), fog: false, toneMapped: false });
+  WORLD.masts = WORLD.masts || [];
+  WORLD.masts.push(beaconMat);
 
   const g = new THREE.Group();
-  g.add(trunk); g.add(inst);
+  const mast = new THREE.Mesh(new THREE.CylinderGeometry(.05, .08, 5.6, 8), dark);
+  mast.position.y = 2.8; mast.castShadow = true; g.add(mast);
+  /* the ground ring the mast rises from */
+  const base = new THREE.Mesh(new THREE.TorusGeometry(.34, .03, 6, 24), cyan);
+  base.rotation.x = Math.PI / 2; base.position.y = .06; g.add(base);
+  /* two signal cross-arms, cyan traces */
+  const arm1 = new THREE.Mesh(new THREE.BoxGeometry(1.6, .05, .05), armMat);
+  arm1.position.y = 3.6; g.add(arm1);
+  const arm2 = new THREE.Mesh(new THREE.BoxGeometry(1.0, .05, .05), armMat);
+  arm2.position.y = 4.7; g.add(arm2);
+  /* a signal ring */
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(.5, .02, 6, 24), cyan);
+  ring.rotation.x = Math.PI / 2; ring.position.y = 2.9; g.add(ring);
+  /* the blinking beacon tip */
+  const tip = new THREE.Mesh(new THREE.OctahedronGeometry(.16, 0), beaconMat);
+  tip.position.y = 5.95; g.add(tip);
+
   g.position.set(x, 0, z); g.scale.setScalar(scale || 1);
   g.rotation.y = rnd() * TAU;
   scene.add(g);
-  /* leaves breathe in the wind */
-  leafMat.onBeforeCompile = sh => {
-    sh.uniforms.uT = WORLD.uT;
-    sh.vertexShader = 'uniform float uT;\n' + sh.vertexShader.replace('#include <begin_vertex>',
-      '#include <begin_vertex>\n' +
-      'vec3 wp = (instanceMatrix * vec4(0.0,0.0,0.0,1.0)).xyz;\n' +
-      'float ph = wp.x*1.7 + wp.z*1.3 + wp.y*.7;\n' +
-      'transformed.x += sin(uT*1.35 + ph)*0.055;\n' +
-      'transformed.z += cos(uT*1.05 + ph*1.3)*0.045;\n');
-  };
   return g;
 }
 
-function buildRocks() {
-  const mat = new THREE.MeshStandardMaterial({ color: 0x141a1c, roughness: .46, metalness: .10 });
+function buildShards() {
+  const mat = new THREE.MeshStandardMaterial({ color: 0x0a1a26, roughness: .34, metalness: .5,
+    emissive: 0x19c8ff, emissiveIntensity: .55, transparent: true, opacity: .85 });
   const rnd = mulberry32(404), n = noise2D(88);
   const spots = [[-6.2, -5.4, .95], [-7.4, -2.1, .7], [6.6, -7.2, .8], [8.0, -4.0, 1.05],
                  [-9.0, -8.4, 1.15], [9.6, -9.2, .9], [3.4, -7.8, .55], [-3.2, -8.6, .6]];
+  WORLD.rocks = [];
   spots.forEach((s, i) => {
     const geo = new THREE.IcosahedronGeometry(s[2], 2);
     const p = geo.attributes.position;
@@ -2885,10 +2812,11 @@ function buildRocks() {
     }
     geo.computeVertexNormals();
     const m = new THREE.Mesh(geo, mat);
-    m.position.set(s[0], s[2] * .30, s[1]);
+    m.position.set(s[0], s[2] * .30 + 1.3, s[1]);
     m.rotation.set(rnd(), rnd() * TAU, rnd() * .4);
-    m.castShadow = true; m.receiveShadow = true;
+    m.castShadow = true;
     scene.add(m);
+    WORLD.rocks.push(m);
   });
 }
 
@@ -2924,32 +2852,10 @@ function cutoutMaterial(canvasEl, sway) {
 }
 
 function buildForeground() {
-  /* the plane widths are sized against the frustum at their own depth: a
-     26-unit sheet two metres from the lens only shows its middle tenth */
-  const layers = [
-    /* name        canvas                                                                     x     y     z     w     h   sway */
-    ['grassFar',  texGrassCutout(101, { crest: .30, peak: .46, wide: .42, blades: 11000, len: 34, warm: .70, crest2: .46, crest3: .40 }),
-                  -3.4,  2.85, -0.4, 24, 12, .040],
-    ['rockLeft',  texRockCutout(404, { blobs: [[.24, .78, .48, .38], [.58, .94, .46, .30], [.84, 1.06, .42, .28]] }),
-                  -7.2,  2.55,  1.8, 17, 11.3, .010],
-    ['grassMid',  texGrassCutout(202, { crest: .60, peak: .55, wide: .40, blades: 13000, len: 40, warm: .95, crest2: -.44, crest3: .34 }),
-                   3.9,  2.86,  3.6, 15,  7.5, .062],
-    ['grassNear', texGrassCutout(303, { crest: .42, peak: .62, wide: .48, blades: 16000, len: 50, warm: .85, crest2: .42, crest3: .44 }),
-                  -1.9,  2.92,  5.6, 12,  6, .092],
-    ['bough',     texBranchCutout(505), 4.6, 2.95, 6.4, 13, 8.7, .045],
-    ['rockNear',  texRockCutout(606, { blobs: [[.18, .86, .54, .44], [.54, 1.02, .50, .36], [.86, .92, .40, .32]] }),
-                  -6.6,  1.70,  6.0, 9, 6, .008]
-  ];
+  /* the near plane is CSS-only now — dark gradient plates over the frame —
+     so the 3-D grass and boulder cut-outs stand down. WORLD.fg stays defined
+     because the boot and updateWorld still walk it. */
   WORLD.fg = [];
-  layers.forEach(L => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(L[5], L[6], 12, 12), cutoutMaterial(L[1], L[7]));
-    m.position.set(L[2], L[3], L[4]);
-    m.renderOrder = 20 + WORLD.fg.length;
-    m.name = L[0];
-    m.frustumCulled = false;
-    scene.add(m);
-    WORLD.fg.push(m);
-  });
 }
 
 /* --------------------------------------------------- the giant wordmark */
@@ -2984,9 +2890,9 @@ function buildWordmark() {
     /* the vertical wash is baked per glyph so the whole word shares one ramp */
     const gy0 = PAD + g.asc - ascMax, gy1 = PAD + g.asc + descMax * .4;
     const grad = x.createLinearGradient(0, gy0, 0, gy1);
-    grad.addColorStop(0, 'rgb(226,236,229)');
-    grad.addColorStop(.52, 'rgb(198,214,203)');
-    grad.addColorStop(1, 'rgb(150,170,157)');
+    grad.addColorStop(0, 'rgb(210,246,255)');
+    grad.addColorStop(.52, 'rgb(140,222,255)');
+    grad.addColorStop(1, 'rgb(64,160,220)');
     x.fillStyle = grad;
     x.fillText(g.ch, PAD + g.l, PAD + g.asc);
 
@@ -3011,7 +2917,7 @@ const WORD = { glyphs: [], group: null, ink: null, reveal: 0 };
 /* --------------------------------------------------------- atmospherics */
 function buildAtmosphere() {
   /* drifting haze slabs */
-  const hazeTex = tx(texGlow('rgba(160,205,210,.55)', 'rgba(110,165,175,.18)'));
+  const hazeTex = tx(texGlow('rgba(120,220,255,.45)', 'rgba(60,150,210,.16)'));
   WORLD.haze = [];
   const rnd = mulberry32(66);
   for (let i = 0; i < (LOW ? 4 : 6); i++) {
@@ -3025,7 +2931,7 @@ function buildAtmosphere() {
     scene.add(h); WORLD.haze.push(h);
   }
 
-  /* embers around the nodes and the disc */
+  /* data motes around the nodes and the disc — cyan and magenta */
   const N = LOW ? 220 : 460;
   const pos = new Float32Array(N * 3), seed = new Float32Array(N);
   for (let i = 0; i < N; i++) {
@@ -3036,30 +2942,32 @@ function buildAtmosphere() {
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
   const emb = new THREE.Points(g, new THREE.ShaderMaterial({
-    uniforms: { uT: WORLD.uT, uTex: { value: tx(texGlow('rgba(255,190,140,1)', 'rgba(255,120,60,.35)')) },
+    uniforms: { uT: WORLD.uT, uTex: { value: tx(texGlow('rgba(170,245,255,1)', 'rgba(60,190,240,.35)')) },
       uSize: { value: vpH() * .5 } },
     transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
     vertexShader:
-      'attribute float aSeed; uniform float uT; uniform float uSize; varying float vA;\n' +
+      'attribute float aSeed; uniform float uT; uniform float uSize; varying float vA; varying float vSeed;\n' +
       'void main(){ vec3 p=position;\n' +
       ' p.y = mod(p.y + uT*(0.14+aSeed*0.28), 11.5);\n' +
       ' p.x += sin(uT*0.36 + aSeed*22.0)*0.85;\n' +
       ' p.z += cos(uT*0.29 + aSeed*17.0)*0.7;\n' +
       ' vec4 mv = modelViewMatrix * vec4(p,1.0);\n' +
       ' vA = (0.25+aSeed*0.75) * smoothstep(11.5,7.0,p.y) * smoothstep(0.0,1.4,p.y);\n' +
+      ' vSeed = aSeed;\n' +
       ' gl_PointSize = uSize*(0.010+aSeed*0.020)/max(-mv.z,0.6);\n' +
       ' gl_Position = projectionMatrix * mv; }',
     fragmentShader:
-      'uniform sampler2D uTex; varying float vA;\n' +
+      'uniform sampler2D uTex; varying float vA; varying float vSeed;\n' +
       'void main(){ vec4 t=texture2D(uTex, gl_PointCoord);\n' +
-      ' gl_FragColor = vec4(t.rgb*vec3(1.6,0.78,0.42), t.a*vA*0.75); }'
+      ' vec3 c = mix(vec3(0.5,1.6,1.8), vec3(1.6,0.35,1.5), step(0.5, vSeed));\n' +
+      ' gl_FragColor = vec4(t.rgb*c, t.a*vA*0.75); }'
   }));
   emb.frustumCulled = false; emb.renderOrder = 5;
   scene.add(emb); WORLD.embers = emb;
 
   /* rain in the slot of open sky */
   if (!LOW) {
-    const D = 900, rp = new Float32Array(D * 2 * 3), rt = new Float32Array(D * 2), rs = new Float32Array(D * 2), rl = new Float32Array(D * 2);
+    const D = 700, rp = new Float32Array(D * 2 * 3), rt = new Float32Array(D * 2), rs = new Float32Array(D * 2), rl = new Float32Array(D * 2);
     for (let i = 0; i < D; i++) {
       const x = (rnd() - .5) * 40, z = -30 + rnd() * 34, y = rnd() * 17, sp = 4.5 + rnd() * 6.5, ln = .30 + rnd() * .55;
       for (let k = 0; k < 2; k++) {
@@ -3092,8 +3000,8 @@ function buildAtmosphere() {
   /* ripples on the standing water */
   const ringC = cvs(256, 256), rx2 = ringC.getContext('2d');
   const rg2 = rx2.createRadialGradient(128, 128, 84, 128, 128, 128);
-  rg2.addColorStop(0, 'rgba(255,255,255,0)'); rg2.addColorStop(.62, 'rgba(255,255,255,.55)');
-  rg2.addColorStop(.86, 'rgba(255,255,255,.22)'); rg2.addColorStop(1, 'rgba(255,255,255,0)');
+  rg2.addColorStop(0, 'rgba(255,255,255,0)'); rg2.addColorStop(.62, 'rgba(140,230,255,.55)');
+  rg2.addColorStop(.86, 'rgba(120,215,255,.22)'); rg2.addColorStop(1, 'rgba(255,255,255,0)');
   rx2.fillStyle = rg2; rx2.fillRect(0, 0, 256, 256);
   const ringTex = tx(ringC);
   WORLD.ripples = [];
@@ -3433,7 +3341,7 @@ void main () {
   outColor = vec4(vec3(uDark) * a, a);
 }`;
 
-const CL_SEG = 96, CL_NODES = CL_SEG + 1, CL_DT = 1 / 120;
+const CL_SEG = 64, CL_NODES = CL_SEG + 1, CL_DT = 1 / 120;
 const CL_WAVE = 30, CL_STIFF = 0.55, CL_GAIN = 5.0, CL_BLEED = 48;
 const CLOTH_DEFAULTS = {
   pin: 'top', wind: 3, speed: .5, amplitude: 30, drape: 40, brush: 2.05,
@@ -3812,14 +3720,14 @@ function buildCardCloth() {
 }
 
 function buildLights() {
-  scene.add(new THREE.HemisphereLight(0x53838f, 0x060a08, .13));
+  scene.add(new THREE.HemisphereLight(0x487a94, 0x05080e, .13));
 
-  const key = new THREE.DirectionalLight(0xb6dbe4, 1.22);
+  const key = new THREE.DirectionalLight(0xbfe0ea, 1.22);
   key.position.set(2.6, 21, 2.5);
   key.target.position.set(0, 2.2, -12.5); scene.add(key.target);
   if (WANT_SHADOW) {
     key.castShadow = true;
-    const S = LOW ? 1024 : 2048;
+    const S = LOW ? 512 : 1024;
     key.shadow.mapSize.set(S, S);
     const c = key.shadow.camera;
     c.left = -26; c.right = 26; c.top = 34; c.bottom = -16; c.near = 3; c.far = 78;
@@ -3827,26 +3735,26 @@ function buildLights() {
   }
   scene.add(key); WORLD.key = key;
 
-  /* server-disc light: no shadow, no fill, purely a rim down the right-hand
-     slope of the core — without it the tower is a flat black cut-out */
-  const moonKey = new THREE.DirectionalLight(0xffb060, .52);
+  /* server-sphere light: no shadow, no fill, purely a rim down the right-hand
+     slope of the core — without it the projection is a flat black cut-out */
+  const moonKey = new THREE.DirectionalLight(0x8fd0ff, .52);
   moonKey.position.set(26, 30, -60);
   moonKey.target.position.set(0, 8, -40); scene.add(moonKey.target);
   scene.add(moonKey);
 
   /* The core's own lamps. They light the podium and the top of the flight and
-     nothing else — a range that reaches the antenna would turn the whole tower
-     into a lantern and the silhouette disappears. */
-  const hallL = new THREE.PointLight(0xff8a26, 2.3, 15, 2);
+     nothing else — a range that reaches the beacon would turn the whole core
+     into a floodlight and the silhouette disappears. */
+  const hallL = new THREE.PointLight(0x19c8ff, 2.3, 15, 2);
   hallL.position.set(0, PODIUM + 1.2, TEMPLE_Z + 8.6); scene.add(hallL); WORLD.hallLight = hallL;
   [-1, 1].forEach(s => {
-    const w = new THREE.PointLight(0xff8420, 2.2, 11, 2);
+    const w = new THREE.PointLight(0x19c8ff, 2.2, 11, 2);
     w.position.set(s * 11.4, PODIUM + 1.2, TEMPLE_Z + 5.6); scene.add(w);
   });
 
-  /* the disc throws almost nothing, but a trace of amber high on the right
+  /* the sphere throws almost nothing, but a trace of cyan high on the right
      keeps it attached to the scene instead of floating on top of it */
-  const moonL = new THREE.PointLight(0xffa040, 3.0, 46, 2);
+  const moonL = new THREE.PointLight(0x2ad4ff, 3.0, 46, 2);
   moonL.position.set(11.0, 17.0, -24.0); scene.add(moonL); WORLD.moonLight = moonL;
 
   const fill = new THREE.PointLight(0x86c6d2, 0.95, 30, 2);
@@ -3854,7 +3762,7 @@ function buildLights() {
 
   /* the flight is the spine of the composition — without a lamp of its own it
      falls into the same black as the ground and the eye has nothing to climb */
-  const stairL = new THREE.PointLight(0xffa049, 4.2, 17, 2);
+  const stairL = new THREE.PointLight(0x19c8ff, 4.2, 17, 2);
   stairL.position.set(0, 7.6, -26.0); scene.add(stairL);
 }
 /* ====================================================== 6 · planar mirror */
@@ -4377,9 +4285,9 @@ function makeGrain() {
 const CARDS = [];
 function buildCards() {
   const defs = [
-    { p: [-2.0, 1.60, -2.0], t: [0, 10.0, -34.0], fov: 40 },    /* the boot       */
-    { p: [4.2, 2.90, -9.5], t: [6.4, 2.90, -14.4], fov: 40 },   /* the jobs queue */
-    { p: [3.4, 2.40, 2.0], t: [-1.0, -.60, -6.0], fov: 40 },    /* the core disc  */
+    { p: [0.0, 6.50, -28.0], t: [0, 10.4, -44.0], fov: 40 },    /* the boot: core crystal */
+    { p: [10.5, 3.20, -4.0], t: [7.4, 1.8, -10.0], fov: 40 },   /* the jobs queue: nodes  */
+    { p: [10.5, 3.20, -4.0], t: [7.4, 1.8, -10.0], fov: 40 },   /* TEST card2: same as v1 */
     { p: [0.6, 3.40, -12.0], t: [0, 12.0, -40.0], fov: 26 }     /* hero window    */
   ];
   $$('[data-view]').forEach(el => {
@@ -4534,7 +4442,7 @@ function resize() {
 function updateWorld(dt) {
   WORLD.uT.value = clock;
 
-  /* the focused chapter warms the lanterns and swells the disc */
+  /* the focused chapter brightens the nodes and swells the disc */
   RIG.focusAmt = damp(RIG.focusAmt, RIG.focus >= 0 ? 1 : 0, 5, dt);
   const pulse = Math.sin(clock * 1.9) * .5 + .5;
   const f = RIG.focusAmt;
@@ -4543,9 +4451,22 @@ function updateWorld(dt) {
   /* the moon only breathes — the haze in front of it is what actually moves */
   if (WORLD.moonHalo) WORLD.moonHalo.material.opacity = .44 + f * .10 + Math.sin(clock * .34) * .05;
   /* the beacon on the mast blinks a steady morse */
-  if (WORLD.beaconMat) WORLD.beaconMat.color.setHSL(.09, .95, .5 + .20 * Math.sin(clock * 5.2));
+  if (WORLD.beaconMat) WORLD.beaconMat.color.setHSL(.54, .95, .5 + .20 * Math.sin(clock * 5.2));
   /* the edge rails breathe slowly under the haze */
-  if (WORLD.edgeRails) WORLD.edgeRails.led.color.setHSL(.09, .95, .55 + .10 * Math.sin(clock * 1.7));
+  if (WORLD.edgeRails) WORLD.edgeRails.led.color.setHSL(.54, .95, .55 + .10 * Math.sin(clock * 1.7));
+  /* the data crystal spins and the orbital rings turn against it */
+  if (WORLD.beacon) WORLD.beacon.rotation.y += dt * 1.3;
+  if (WORLD.rings) WORLD.rings.forEach((r, i) => { r.rotation.y += dt * (.42 + i * .24); });
+  /* the energy beam pulses with the core */
+  if (WORLD.beam) WORLD.beam.opacity = .42 + .16 * Math.sin(clock * 2.2);
+  /* the masts blink their own phases */
+  if (WORLD.masts) WORLD.masts.forEach((m, i) => {
+    m.color.setHSL(.54, .95, .5 + .16 * Math.sin(clock * 4.1 + i * 1.9));
+  });
+  /* the hologram shards drift slowly */
+  if (WORLD.rocks) WORLD.rocks.forEach((m, i) => { m.rotation.y += dt * .18 * (i % 2 ? -1 : 1); });
+  /* the orbit ring turns around the server sphere */
+  if (WORLD.orbitRing) WORLD.orbitRing.rotation.z += dt * .24;
   if (WORLD.lanternLights) WORLD.lanternLights.forEach((l, i) => {
     l.intensity = 2.6 * (1 + f * .55) * (.86 + .22 * Math.sin(clock * (2.3 + i * .7) + i * 2.1) + .1 * pulse);
   });
@@ -4614,12 +4535,12 @@ function frame(now) {
   tPrev = now; clock += dt;
   fadeIn = INTRO.t0 ? sat((now - INTRO.t0) / 700) : 1;
 
-  if (!PERF.locked && clock > 2.2) {
+  if (!PERF.locked && clock > 1.4) {
     PERF.acc += raw; PERF.n++;      /* … but the governor reads the truth */
     if (PERF.n >= 40 || PERF.acc > .9) {
       const avg = PERF.acc / PERF.n; PERF.acc = 0; PERF.n = 0;
-      if (avg > .0230 && PERF.scale > .55) { PERF.scale = Math.max(.55, PERF.scale * (avg > .05 ? .64 : .85)); resize(); }
-      else if (avg < .0138 && PERF.scale < 1) { PERF.scale = Math.min(1, PERF.scale + .08); resize(); }
+      if (avg > .024 && PERF.scale > .72) { PERF.scale = Math.max(.72, PERF.scale * (avg > .05 ? .64 : .85)); resize(); }
+      else if (avg < .015 && PERF.scale < 1) { PERF.scale = Math.min(1, PERF.scale + .05); resize(); }
     }
   }
   RIG.prog = progressFor(scrollY);
@@ -4645,11 +4566,11 @@ const JOBS = [
   ['Reading the type', () => document.fonts && document.fonts.load('700 224px Onest')],
   ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
   ['Cutting the approach', () => buildShell()],
-  ['Raising the core', () => buildTemple()],
-  ['Hanging the disc', () => buildMoon()],
-  ['Raising the pylons', () => buildTorii()],
+  ['Raising the core', () => buildCore()],
+  ['Hanging the disc', () => buildDisc()],
+  ['Raising the pylons', () => buildPylons()],
   ['Seating the nodes', () => {
-    buildRocks();
+    buildShards();
     const nodes = [];
     buildDeviceNode(7.4, -7.0, 1.15); nodes.push(new THREE.Vector3(7.4, 1.66, -7.0));
     buildDeviceNode(-7.6, -5.2, 1.0); nodes.push(new THREE.Vector3(-7.6, 1.66, -5.2));
@@ -4671,9 +4592,9 @@ const JOBS = [
     buildCables(nodes);
   }],
   ['Seeding the packets', () => {
-    buildMaple(71, 12.6, -13.0, 1.05); buildMaple(72, -11.8, -9.4, .95);
-    buildMaple(73, 9.2, -19.0, .82);   buildMaple(74, -14.5, -17.5, 1.0);
-    buildMaple(75, 16.5, -6.0, .88);
+    buildMast(71, 12.6, -13.0, 1.05); buildMast(72, -11.8, -9.4, .95);
+    buildMast(73, 9.2, -19.0, .82);   buildMast(74, -14.5, -17.5, 1.0);
+    buildMast(75, 16.5, -6.0, .88);
   }],
   ['Painting the near grass', () => buildForeground()],
   ['Cutting the word', () => buildWordmark()],
@@ -4724,7 +4645,7 @@ function fallback(err) {
   document.body.classList.remove('is-locked');
   preEl.classList.add('done');
   $$('[data-rv], .mask-line').forEach(e => e.classList.add('rv-in'));
-  window.__kage = window.__secret = { fallback: true, error: String(err && err.message || err) };
+  window.__kage = window.__secret = window.__yaleed = { fallback: true, error: String(err && err.message || err) };
 }
 
 function start() {
@@ -4756,7 +4677,7 @@ function start() {
   running = true; tPrev = performance.now();
   INTRO.t0 = shot !== null ? 0 : (REDUCE ? performance.now() - 4000 : performance.now());
   queue();
-  window.__kage = window.__secret = { RIG: RIG, WORLD: WORLD, WORD: WORD, CAM: CAM, POST: POST, renderer: renderer, scene: scene, camera: camera, anchors: () => anchors };
+  window.__kage = window.__secret = window.__yaleed = { RIG: RIG, WORLD: WORLD, WORD: WORD, CAM: CAM, POST: POST, renderer: renderer, scene: scene, camera: camera, anchors: () => anchors };
 }
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(boot, 0);
