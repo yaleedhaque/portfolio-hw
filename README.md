@@ -54,3 +54,7 @@ The vendored Three.js r149 build retains its MIT license notice and copyright at
 ## License
 
 No license is currently granted for reuse or redistribution of this project's code or artwork. The third-party Three.js runtime remains covered by its included MIT license notice.
+
+---
+
+**Md. Yaleed Haque** — [GitHub](https://github.com/yaleedhaque) · [Portfolio](https://yaleedhaque.github.io) · yaleedhaque@users.noreply.github.com
