@@ -2281,15 +2281,18 @@ const hdr = (r, g, b) => new THREE.Color().setRGB(r, g, b);
 function surface(t, rep, o) {
   o = o || {};
   const wrap = THREE.RepeatWrapping, aniso = o.aniso || 8;
-  const m = new THREE.MeshStandardMaterial({
+  /* Standard's per-pixel lighting is the whole fill cost on the iGPU the site
+     is seen from most — Lambert does the same diffuse+map+normal work for a
+     fraction of the ALU, and the metallic trims keep Standard on purpose: they
+     are tiny fill and their glints are the only specular the scene has. */
+  const m = new THREE.MeshLambertMaterial({
     map: tx(t.map, { wrap: wrap, repeat: rep, aniso: aniso }),
     normalMap: tx(t.normal, { wrap: wrap, repeat: rep, srgb: false, aniso: aniso }),
     normalScale: new THREE.Vector2(o.normal === undefined ? .8 : o.normal,
                                    o.normal === undefined ? .8 : o.normal),
-    color: o.color === undefined ? 0xffffff : o.color,
-    roughness: o.roughness === undefined ? 1 : o.roughness,
-    metalness: o.metalness === undefined ? .02 : o.metalness
+    color: o.color === undefined ? 0xffffff : o.color
   });
+  if (o.emissive) m.emissive = o.emissive instanceof THREE.Color ? o.emissive : new THREE.Color(o.emissive);
   if (t.rough) m.roughnessMap = tx(t.rough, { wrap: wrap, repeat: rep, srgb: false });
   return m;
 }
@@ -2447,9 +2450,9 @@ function buildShell() {
   const wallT = texWall();
   const wallMap = tx(wallT.map, { wrap: THREE.RepeatWrapping, repeat: [4, 1.4] });
   const wallNrm = tx(wallT.normal, { wrap: THREE.RepeatWrapping, repeat: [4, 1.4], srgb: false });
-  const wallMat = new THREE.MeshStandardMaterial({
+  const wallMat = new THREE.MeshLambertMaterial({
     map: wallMap, normalMap: wallNrm, normalScale: new THREE.Vector2(.85, .85),
-    roughness: .78, metalness: .05, color: 0x2a333f
+    color: 0x2a333f
   });
   /* The court used to be a roofless box. It is now an open night approach:
      nothing encloses the frame but the dark, the ridge and the fog. */
@@ -2477,17 +2480,17 @@ function buildShell() {
 
   /* floor + podium */
   const fT = texFloor();
-  const floorMat = new THREE.MeshStandardMaterial({
+  const floorMat = new THREE.MeshLambertMaterial({
     map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [7, 7], aniso: 16 }),
     normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [7, 7], srgb: false, aniso: 16 }),
-    roughnessMap: tx(fT.rough, { wrap: THREE.RepeatWrapping, repeat: [3.4, 3.4], srgb: false }),
     normalScale: new THREE.Vector2(.30, .30),
     /* The court used to carry a planar mirror and this was tuned to feed it —
        near-polished, and metal enough to hold a reflection. With the mirror
        gone those numbers only made the paving read as sheet metal, so it goes
        back to being wet dark paving: rough, barely metallic, and lit rather
-       than reflecting. */
-    roughness: .74, metalness: .06, color: 0x2e3a45
+       than reflecting. (Lambert: the sheen comes from the diffuse wash, not a
+       specular pass.) */
+    color: 0x2e3a45
   });
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), floorMat);
   floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, -18); floor.receiveShadow = true;
@@ -2506,10 +2509,10 @@ function buildShell() {
      is only ever attached to the water-level floor, and sharing it would make
      the reflection buffer sample itself. It is also deliberately matte — with
      the floor's metalness the forty risers strobed as the camera drifted. */
-  const platMat = new THREE.MeshStandardMaterial({
+  const platMat = new THREE.MeshLambertMaterial({
     map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], aniso: 16 }),
     normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], srgb: false, aniso: 16 }),
-    normalScale: new THREE.Vector2(.18, .18), roughness: .93, metalness: .02, color: 0x27313c
+    normalScale: new THREE.Vector2(.18, .18), color: 0x27313c
   });
   /* the podium the hall stands on */
   const plat = new THREE.Mesh(new THREE.BoxGeometry(42, PODIUM, 24), platMat);
@@ -3033,9 +3036,9 @@ function buildAtmosphere() {
 const LEAF_AHEAD = 11, LEAF_SPREAD = 12, LEAF_R = 30;
 function buildLeafFall() {
   const N = LOW ? 110 : 260;
-  const mat = new THREE.MeshStandardMaterial({
+  const mat = new THREE.MeshLambertMaterial({
     map: tx(texLeaf()), alphaTest: .42, side: THREE.DoubleSide,
-    color: 0x0d222c, roughness: .84, metalness: 0,
+    color: 0x0d222c,
     /* data packets drift through the air: dark cyan bodies with a cool emissive
        edge, so they read as traffic instead of foliage */
     emissive: 0x17626e, emissiveIntensity: .85
@@ -4425,11 +4428,11 @@ function resize() {
     let lw = Math.max(2, pw >> 1), lh = Math.max(2, ph >> 1);
     POST.levels.forEach(L => { L.a.setSize(lw, lh); L.b.setSize(lw, lh); L.w = lw; L.h = lh; lw = Math.max(2, lw >> 1); lh = Math.max(2, lh >> 1); });
   }
-  /* multisampling is the first thing to go when the budget tightens */
-  if (POST.scene) {
-    const want = (!LOW && PERF.scale > .78) ? 2 : 0;
-    if (POST.scene.samples !== want) { POST.scene.samples = want; POST.scene.dispose(); }
-  }
+  /* multisampling is never worth its fill on this iGPU — at 2x it costs the
+     same as a whole resolution step and the governor drops scale instead, so
+     the pixels it keeps end up soft anyway. Leave it off and let the scale
+     climb instead. */
+  if (POST.scene && POST.scene.samples !== 0) { POST.scene.samples = 0; POST.scene.dispose(); }
   CARDS.forEach(C => { C.dirty = true; });
   if (WANT_SHADOW && WORLD.key) WORLD.key.shadow.needsUpdate = true;
   if (WORLD.embers) WORLD.embers.material.uniforms.uSize.value = h * renderer.getPixelRatio() * .5;
@@ -4539,8 +4542,8 @@ function frame(now) {
     PERF.acc += raw; PERF.n++;      /* … but the governor reads the truth */
     if (PERF.n >= 40 || PERF.acc > .9) {
       const avg = PERF.acc / PERF.n; PERF.acc = 0; PERF.n = 0;
-      if (avg > .024 && PERF.scale > .72) { PERF.scale = Math.max(.72, PERF.scale * (avg > .05 ? .64 : .85)); resize(); }
-      else if (avg < .015 && PERF.scale < 1) { PERF.scale = Math.min(1, PERF.scale + .05); resize(); }
+      if (avg > .026 && PERF.scale > .72) { PERF.scale = Math.max(.72, PERF.scale * (avg > .05 ? .64 : .85)); resize(); }
+      else if (avg < .022 && PERF.scale < 1) { PERF.scale = Math.min(1, PERF.scale + .05); resize(); }
     }
   }
   RIG.prog = progressFor(scrollY);
